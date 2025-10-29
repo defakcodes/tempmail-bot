@@ -145,7 +145,7 @@ function setupEventListeners() {
   // Dashboard link
   document.getElementById('dashboardLink').addEventListener('click', (e) => {
     e.preventDefault();
-    chrome.tabs.create({ url: 'http://103.158.13.181:8000/dashboard' });
+    chrome.tabs.create({ url: 'http://172.17.2.13:8000/dashboard' });
   });
   
   // Help link

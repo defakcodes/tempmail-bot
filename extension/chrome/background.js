@@ -39,7 +39,7 @@ function connectWebSocket() {
   }
   
   console.log(`🔌 Connecting to WebSocket as ${userId}...`);
-  socket = new WebSocket(`ws://103.158.13.181:8000/ws/${userId}`);
+  socket = new WebSocket(`ws://172.17.2.13:8000/ws/${userId}`);
   
   socket.onopen = () => {
     console.log('✅ WebSocket connected');
