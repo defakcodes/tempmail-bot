@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "TempMail OTP Auto-Fill",
+  "version": "1.0.0",
+  "description": "Auto-fill OTP codes from TempMail bot directly into web forms",
+  
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "notifications",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "ws://localhost:8000/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "TempMail OTP Auto-Fill"
+  },
+  
+  "commands": {
+    "fill-otp": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+O"
+      },
+      "description": "Manual trigger OTP fill"
+    }
+  }
+}

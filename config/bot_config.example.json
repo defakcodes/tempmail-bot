@@ -1,0 +1,6 @@
+{
+    "telegram_bot_token": "YOUR_BOT_TOKEN_HERE",
+    "check_interval": 3,
+    "otp_timeout": 180,
+    "max_sessions": 100
+}

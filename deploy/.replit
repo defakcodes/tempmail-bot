@@ -1,0 +1,12 @@
+run = "python main.py all"
+language = "python3"
+
+[env]
+TELEGRAM_BOT_TOKEN = "YOUR_TOKEN_HERE"
+
+[packager]
+language = "python3"
+ignoredPackages = ["discord.py"]
+
+[unitTest]
+language = "python3"

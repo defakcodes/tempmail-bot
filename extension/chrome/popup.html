@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 300px;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      background: #000;
+      color: #fff;
+    }
+    
+    .container {
+      background: #000;
+      padding: 16px;
+    }
+    
+    .header {
+      border-bottom: 1px solid #333;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .title {
+      font-size: 14px;
+      font-weight: normal;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #333;
+    }
+    
+    .status-dot.connected {
+      background: #fff;
+    }
+    
+    .section {
+      margin-bottom: 16px;
+    }
+    
+    .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    
+    .value {
+      font-size: 12px;
+      color: #fff;
+      word-break: break-all;
+      margin-bottom: 12px;
+    }
+    
+    .otp-display {
+      border: 1px solid #333;
+      padding: 16px;
+      text-align: center;
+      margin: 16px 0;
+    }
+    
+    .otp-code {
+      font-size: 24px;
+      letter-spacing: 6px;
+      margin: 8px 0;
+    }
+    
+    .otp-time {
+      font-size: 10px;
+      color: #666;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    
+    button {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #fff;
+      background: #000;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    button:hover {
+      background: #fff;
+      color: #000;
+    }
+    
+    button:active {
+      transform: scale(0.98);
+    }
+    
+    button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    button.secondary {
+      border-color: #666;
+      color: #666;
+    }
+    
+    button.secondary:hover {
+      background: #666;
+      color: #000;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #333;
+      background: #000;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #fff;
+    }
+    
+    .divider {
+      height: 1px;
+      background: #333;
+      margin: 16px 0;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 24px 0;
+      color: #666;
+      font-size: 12px;
+    }
+    
+    .footer {
+      border-top: 1px solid #333;
+      padding-top: 12px;
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+    }
+    
+    .footer a {
+      color: #666;
+      text-decoration: none;
+    }
+    
+    .footer a:hover {
+      color: #fff;
+    }
+    
+    .notification {
+      position: fixed;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      background: #fff;
+      color: #000;
+      padding: 8px;
+      font-size: 11px;
+      display: none;
+      animation: slideUp 0.2s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="title">OTP AUTO-FILL</div>
+      <div class="status">
+        <div class="status-dot disconnected" id="statusDot"></div>
+        <span id="statusText">DISCONNECTED</span>
+      </div>
+    </div>
+    
+    <!-- Setup Section -->
+    <div class="section" id="setupSection">
+      <div class="label">USER ID</div>
+      <input type="text" id="userIdInput" placeholder="Enter Telegram User ID">
+      <button id="connectBtn">CONNECT</button>
+    </div>
+    
+    <!-- Info Section -->
+    <div class="section" id="infoSection" style="display: none;">
+      <div class="label">USER ID</div>
+      <div class="value" id="currentUserId">-</div>
+      
+      <div class="label">EMAIL</div>
+      <div class="value" id="currentEmail">-</div>
+      
+      <button class="secondary" id="disconnectBtn">DISCONNECT</button>
+    </div>
+    
+    <!-- OTP Section -->
+    <div id="otpSection" style="display: none;">
+      <div class="otp-display" id="otpDisplay" style="display: none;">
+        <div class="label">LAST OTP</div>
+        <div class="otp-code" id="otpCode">------</div>
+        <div class="otp-time" id="otpTime">-</div>
+      </div>
+      
+      <div class="buttons">
+        <button id="autoFillBtn">FILL</button>
+        <button id="copyBtn">COPY</button>
+      </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+      NO OTP RECEIVED
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <a href="#" id="dashboardLink">DASHBOARD</a>
+      <a href="#" id="helpLink">HELP</a>
+    </div>
+  </div>
+  
+  <!-- Notification -->
+  <div class="notification" id="notification"></div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

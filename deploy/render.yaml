@@ -1,0 +1,23 @@
+services:
+  # Telegram Bot Service
+  - type: worker
+    name: tempmail-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py bot
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+    autoDeploy: false
+    
+  # WebSocket Server Service  
+  - type: web
+    name: tempmail-autofill
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py server
+    port: 8000
+    envVars:
+      - key: PORT
+        value: 8000
+    autoDeploy: false

@@ -1,0 +1,12 @@
+# Spacefile for Deta Space
+v: 0
+micros:
+  - name: tempmail-bot
+    src: .
+    engine: python3.9
+    primary: true
+    run: python main.py bot
+    presets:
+      env:
+        - name: TELEGRAM_BOT_TOKEN
+          description: Your Telegram Bot Token
